@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.datacollectorservice.serviceName }}
+  name: {{ .Values.datacollectorservice.name }}
   namespace: {{ .Values.datacollectorservice.namespace }}
   labels:
     application: {{ .Values.datacollectorservice.application }}
@@ -20,21 +20,21 @@ spec:
   template:
     metadata:
       labels:
-        {{- include "pod.defaultLabels" . | nindent 8 }}
         application: {{ .Values.datacollectorservice.application }}
         version: {{ .Values.datacollectorservice.version }}
         stage: {{ .Values.datacollectorservice.stage }}
         #helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
         tier: {{ .Values.datacollectorservice.tier }}
-      annotations:
-        #checksum/configmap: {{ include (print $.Template.BasePath "/configmap-datacollectorservice.yaml") . | sha256sum }}
-        #checksum/secret: {{ include (print $.Template.BasePath "/secret-datacollectorservice.yaml") . | sha256sum }}
     spec:
-      serviceAccountName: {{ .Values.datacollectorservice.serviceAccountName }}
+      serviceAccountName: {{ .Values.datacollectorservice.application }}-admin
       containers:
         - name: {{ .Values.datacollectorservice.service.name }}
-          image: "{{ .Values.registry }}/{{ .Values.datacollectorservice.repository }}:{{ .Values.datacollectorservice.version }}"
+          image: "{{ .Values.datacollectorservice.image.registry }}/{{ .Values.datacollectorservice.image.name }}:{{ .Values.datacollectorservice.image.version }}"
           imagePullPolicy: IfNotPresent
+          command:
+          - /bin/sh
+          - -c
+          - sleep 1000
           ports:
             - name: {{ .Values.datacollectorservice.port.name }}
               containerPort: {{ .Values.datacollectorservice.port.number }}
@@ -54,12 +54,3 @@ spec:
                   key: {{ $key }}
             {{- end }}
             {{- end }}
-            #{{- if $.Values.datacollectorservice.configMap }}
-            #{{- range $key, $values := $.Values.datacollectorservice.configMap }}
-            #- name: {{ $key }}
-            #  valueFrom:
-            #    configMapKeyRef:
-            #      name: {{ $.Values.datacollectorservice.serviceName }}
-            #      key: {{ $key }}
-            #{{- end }}
-            #{{- end }}

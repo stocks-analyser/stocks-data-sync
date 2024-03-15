@@ -5,7 +5,7 @@ metadata:
   namespace: argocd
 spec:
     source:
-      targetRevision: development
+      targetRevision: HEAD
       helm:
         valueFiles:
         - values/development/values.yaml

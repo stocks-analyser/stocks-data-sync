@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: ssh://git@github.com:alejandropriv/stock-data-collector-service
+    repoURL: "git@github.com:alejandropriv/stock-data-collector-service"
     path: deploy/helm
     helm:
       releaseName: data-collector-service
