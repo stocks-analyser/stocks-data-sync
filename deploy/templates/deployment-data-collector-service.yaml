@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.datacollectorservice.serviceName }}
+  namespace: {{ .Values.datacollectorservice.namespace }}
+  labels:
+    application: {{ .Values.datacollectorservice.application }}
+    version: {{ .Values.datacollectorservice.version }}
+    stage: {{ .Values.datacollectorservice.stage }}
+    #helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    tier: {{ .Values.datacollectorservice.tier }}
+
+spec:
+  replicas: {{.Values.datacollectorservice.replicaCount }}
+  selector:
+    matchLabels:
+      application: {{ .Values.datacollectorservice.application }}
+      stage: {{ .Values.datacollectorservice.stage }}
+      tier: {{ .Values.datacollectorservice.tier }}
+  template:
+    metadata:
+      labels:
+        {{- include "pod.defaultLabels" . | nindent 8 }}
+        application: {{ .Values.datacollectorservice.application }}
+        version: {{ .Values.datacollectorservice.version }}
+        stage: {{ .Values.datacollectorservice.stage }}
+        #helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        tier: {{ .Values.datacollectorservice.tier }}
+      annotations:
+        #checksum/configmap: {{ include (print $.Template.BasePath "/configmap-datacollectorservice.yaml") . | sha256sum }}
+        #checksum/secret: {{ include (print $.Template.BasePath "/secret-datacollectorservice.yaml") . | sha256sum }}
+    spec:
+      serviceAccountName: {{ .Values.datacollectorservice.serviceAccountName }}
+      containers:
+        - name: {{ .Values.datacollectorservice.service.name }}
+          image: "{{ .Values.registry }}/{{ .Values.datacollectorservice.repository }}:{{ .Values.datacollectorservice.version }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: {{ .Values.datacollectorservice.port.name }}
+              containerPort: {{ .Values.datacollectorservice.port.number }}
+          livenessProbe:
+            httpGet: 
+              path: "/ping"
+              port: {{ .Values.datacollectorservice.port.number }}
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          env:
+            {{- if $.Values.datacollectorservice.secret }}
+            {{- range $key, $values := $.Values.datacollectorservice.secret }}
+            - name: {{ $key }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.datacollectorservice.serviceName }}
+                  key: {{ $key }}
+            {{- end }}
+            {{- end }}
+            #{{- if $.Values.datacollectorservice.configMap }}
+            #{{- range $key, $values := $.Values.datacollectorservice.configMap }}
+            #- name: {{ $key }}
+            #  valueFrom:
+            #    configMapKeyRef:
+            #      name: {{ $.Values.datacollectorservice.serviceName }}
+            #      key: {{ $key }}
+            #{{- end }}
+            #{{- end }}

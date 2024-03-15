@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: data-collector-service
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: ssh://git@github.com:alejandropriv/stock-data-collector-service
+    path: deploy/helm
+    helm:
+      releaseName: data-collector-service
+      #parameters:
+      #  - name: data-collector-service.version
+      #    value: $ARGOCD_APP_REVISION_SHORT
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: data-collector-service

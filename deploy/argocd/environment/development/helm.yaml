@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: data-collector-service
+  namespace: argocd
+spec:
+    source:
+      targetRevision: development
+      helm:
+        valueFiles:
+        - values/development/values.yaml
+    syncPolicy:
+      automated: { }
