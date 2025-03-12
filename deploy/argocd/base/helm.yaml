@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "git@github.com:alejandropriv/StockDataSync"
+    repoURL: "https://github.com/stocks-analyser/StockDataSync"
     path: deploy/helm
     helm:
       releaseName: stock-data-sync
