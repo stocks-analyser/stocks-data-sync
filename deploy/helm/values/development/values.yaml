@@ -1,21 +1,13 @@
-datacollectorservice:
-  application: data-collector
-  name: data-collector-service
-  namespace: data-collector-service
+stockDataSync:
+  serviceAccountName: stock-data-sync-admin
   image:
     registry: registry.hub.docker.com/library
     name: busybox
     version: 1.36.0
     
-  port:
-    name: datac-port
-    number: 2500
-  replicaCount: 2
+    
   service:
-    name: data-collector-svc
+    name: stock-data-sync-svc
     port: 8080
     type: ClusterIP
   
-  stage: development
-  tier: backend
-  version: 0.0.1
