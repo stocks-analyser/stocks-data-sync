@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.stockdatasync.displayname }}
-  namespace: {{ .Values.stockdatasync.displayname }}
+  name: stock-data-sync
+  namespace: stock-data-sync
   labels:
-    application: {{ .Values.stockdatasync.displayname }}
+    application: stock-data-sync
     version: 0.0.1
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      application: {{ .Values.stockDataSync.displayname }}
+      application: stock-data-sync
 
   template:
     metadata:
       labels:
-        application: {{ .Values.stockDataSync.displayname }}
+        application: stock-data-sync
     spec:
-      serviceAccountName: {{ .Values.stockDataSync.serviceAccountName }}
+      serviceAccountName: stock-data-sync-admin
       containers:
-        - name: {{ .Values.stockDataSync.displayname }}
+        - name: stock-data-sync
           image: "{{ .Values.stockDataSync.image.registry }}/{{ .Values.stockDataSync.image.name }}:{{ .Values.stockDataSync.image.version }}"
           imagePullPolicy: IfNotPresent
           command:
@@ -28,12 +28,12 @@ spec:
           - -c
           - sleep 1000
           ports:
-            - name: {{ .Values.stockDataSync.port.name }}
-              containerPort: {{ .Values.stockDataSync.port.number }}
+            - name: stock-data-sync-port
+              containerPort: 3080
           livenessProbe:
             httpGet: 
               path: "/ping"
-              port: {{ .Values.stockDataSync.port.number }}
+              port: 3080
             initialDelaySeconds: 10
             periodSeconds: 30
           env:

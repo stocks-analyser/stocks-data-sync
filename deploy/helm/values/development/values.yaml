@@ -1,16 +1,11 @@
 stockDataSync:
-  displayname: stock-data-sync
-  namespace: stock-data-sync
   serviceAccountName: stock-data-sync-admin
   image:
     registry: registry.hub.docker.com/library
     name: busybox
     version: 1.36.0
     
-  port:
-    name: stock-data-sync-port
-    number: 2500
-  replicaCount: 2
+    
   service:
     name: stock-data-sync-svc
     port: 8080
