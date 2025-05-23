@@ -30,7 +30,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./docker/
           push: true
           platforms: linux/amd64
           tags: alejandropriv/data-sync:latest
