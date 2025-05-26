@@ -28,7 +28,7 @@ spec:
           - -c
           - sleep 1000
           ports:
-            - name: stock-data-sync-port
+            - name: port
               containerPort: 3080
           livenessProbe:
             httpGet: 
