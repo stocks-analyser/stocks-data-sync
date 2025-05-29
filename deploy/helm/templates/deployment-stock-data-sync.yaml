@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: stock-data-sync
-  namespace: stock-data-sync
+  name: stocks-data-sync
+  namespace: stocks-data-sync
   labels:
-    application: stock-data-sync
+    application: stocks-data-sync
     version: 0.0.1
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      application: stock-data-sync
+      application: stocks-data-sync
 
   template:
     metadata:
       labels:
-        application: stock-data-sync
+        application: stocks-data-sync
     spec:
-      serviceAccountName: stock-data-sync-admin
+      serviceAccountName: stocks-data-sync-admin
       containers:
-        - name: stock-data-sync
+        - name: stocks-data-sync
           image: "{{ .Values.stockDataSync.image.registry }}/{{ .Values.stockDataSync.image.name }}:{{ .Values.stockDataSync.image.version }}"
           imagePullPolicy: IfNotPresent
           command:
@@ -40,6 +40,6 @@ spec:
             - name: ALPHAVANTAGE_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: data-source-secret
+                  name: stocks-data-sync
                   key: ALPHAVANTAGE_API_KEY
 

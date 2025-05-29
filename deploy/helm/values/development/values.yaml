@@ -1,13 +1,12 @@
 stockDataSync:
-  serviceAccountName: stock-data-sync-admin
+  serviceAccountName: stocks-data-sync-admin
   image:
     registry: registry.hub.docker.com/library
     name: busybox
-    version: 1.36.0
-    
+    version: 1.36.0 
     
   service:
-    name: stock-data-sync-svc
+    name: stocks-data-sync-svc
     port: 8080
     type: ClusterIP
   

@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: stock-data-sync
+  name: stocks-data-sync
   namespace: argocd
 spec:
   project: default
@@ -9,10 +9,10 @@ spec:
     repoURL: "https://github.com/stocks-analyser/StockDataSync"
     path: deploy/helm
     helm:
-      releaseName: stock-data-sync
+      releaseName: stocks-data-sync
       #parameters:
       #  - name: StockDataSync.version
       #    value: $ARGOCD_APP_REVISION_SHORT
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: stock-data-sync
+    namespace: stocks-data-sync
