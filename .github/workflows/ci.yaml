@@ -51,7 +51,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./docker/
+          context: ./src
+          file: ./docker/Dockerfile
           push: true
           platforms: linux/amd64
           tags: alejandropriv/data-sync:${{ env.SHA }}, alejandropriv/data-sync:latest

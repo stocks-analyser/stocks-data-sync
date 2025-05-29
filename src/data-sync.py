@@ -20,7 +20,7 @@ def main_loop():
     """Your existing API polling loop."""
     print("hello world")
     print("Python version:", sys.version)
-    # while True:
+    while True:
     #     try:
     #         resp = requests.get('https://api.example.com/data')
     #         resp.raise_for_status()
@@ -28,7 +28,7 @@ def main_loop():
     #         # … process your data …
     #     except Exception as e:
     #         print("API error:", e)
-    #     time.sleep(POLL_INTERVAL)
+        time.sleep(POLL_INTERVAL)
 
 if __name__ == '__main__':
     # 1) Install the signal handler:
@@ -39,4 +39,3 @@ if __name__ == '__main__':
     open(LAST_SUCCESS_FILE, 'a').close()
     # 4) Enter your main API loop:
     main_loop()
-
