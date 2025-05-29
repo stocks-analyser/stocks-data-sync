@@ -23,19 +23,16 @@ spec:
         - name: stocks-data-sync
           image: "{{ .Values.stockDataSync.image.registry }}/{{ .Values.stockDataSync.image.name }}:{{ .Values.stockDataSync.image.version }}"
           imagePullPolicy: IfNotPresent
-          command:
-          - /bin/sh
-          - -c
-          - sleep 1000
           ports:
             - name: port
               containerPort: 3080
           livenessProbe:
-            httpGet: 
-              path: "/ping"
-              port: 3080
-            initialDelaySeconds: 10
+            exec:
+              command: [ "python", "/app/probe.py" ]
+            initialDelaySeconds: 20
             periodSeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 3
           env:
             - name: ALPHAVANTAGE_API_KEY
               valueFrom:
