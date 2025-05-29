@@ -21,7 +21,7 @@ spec:
       serviceAccountName: stocks-data-sync-admin
       containers:
         - name: stocks-data-sync
-          image: "{{ .Values.stockDataSync.image.registry }}/{{ .Values.stockDataSync.image.name }}:{{ .Values.stockDataSync.image.version }}"
+          image: "docker.io/alejandropriv/data-sync:{{ .Values.stocksDataSync.version }}"
           imagePullPolicy: IfNotPresent
           ports:
             - name: port

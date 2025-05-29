@@ -6,13 +6,15 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: "https://github.com/stocks-analyser/StockDataSync"
+    repoURL: "https://github.com/stocks-analyser/stocks-data-sync.git"
     path: deploy/helm
     helm:
       releaseName: stocks-data-sync
-      #parameters:
-      #  - name: StockDataSync.version
-      #    value: $ARGOCD_APP_REVISION_SHORT
+      parameters:
+        - name: stocksDataSync.version
+          value: $ARGOCD_APP_REVISION_SHORT
+          forceString: true
+
   destination:
     server: "https://kubernetes.default.svc"
     namespace: stocks-data-sync
