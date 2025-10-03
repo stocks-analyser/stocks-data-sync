@@ -18,3 +18,4 @@ spec:
   destination:
     server: "https://kubernetes.default.svc"
     namespace: stocks-data-sync
+    

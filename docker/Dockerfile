@@ -1,18 +1,34 @@
-FROM python:3.12-slim
+# Build stage
+FROM golang:1.21-alpine AS builder
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Set working directory
 WORKDIR /app
 
-# Copy only requirements.txt to leverage Docker cache
-COPY . /app
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Install git for fetching dependencies
+RUN apk add --no-cache git
 
-# Copy application files
+# Copy go.mod and go.sum files
+COPY go.mod go.sum ./
 
-# Define default command
-ENTRYPOINT ["python", "data-sync.py"]
+# Download dependencies
+RUN go mod download
+
+# Copy source code
+COPY . .
+
+# Build the application
+# CGO_ENABLED=0 creates a static binary
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/stocks-data-sync
+
+# Final stage
+FROM gcr.io/distroless/static:nonroot
+
+WORKDIR /app
+
+# Copy the binary from builder
+COPY --from=builder /app/stocks-data-sync /app/stocks-data-sync
+
+# Use nonroot user
+USER nonroot:nonroot
+
+# Run the binary
+ENTRYPOINT ["/app/stocks-data-sync"]
